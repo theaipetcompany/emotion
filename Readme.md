@@ -2,15 +2,15 @@
 
 This is a modular Python application to display animated emotion faces (e.g., happy, angry) on an OLED display. It is designed to run primarily on Raspberry Pi with SSD1306 OLED displays, but can be adapted for PC environments with simulation.
 
----
 
 ## Structure
-├── bitmaps.py       # Contains byte arrays representing different emotion faces as bitmaps
-├── oled_display.py  # Manages OLED display initialization and rendering bitmaps to the screen
-├── input_handler.py # Handles user input for switching between different emotion faces
-├── main.py          # Main entry point, coordinates display and input handler to switch faces interactivel
-├── requirements.txt # Specifies Python dependencies and versions
-├── README.md        # General information 
+    ├── emotion/
+    │   ├── bitmaps.py       # Contains byte arrays representing different emotion faces as bitmaps
+    │   ├── oled_display.py  # Manages OLED display initialization and rendering bitmaps to the screen
+    │   ├── input_handler.py # Handles user input for switching between different emotion faces
+    │   ├── main.py          # Main entry point, coordinates display and input handler to switch faces interactivel
+    │   ├── requirements.txt # Specifies Python dependencies and versions
+    ├── README.md        # General information 
 
 
 ## Installation Steps
@@ -174,4 +174,3 @@ sudo python3 main.py
 - [Adafruit Blinka](https://github.com/adafruit/Adafruit_Blinka)  
 - [CircuitPython SSD1306](https://github.com/adafruit/Adafruit_CircuitPython_SSD1306)  
 
----
