@@ -50,7 +50,16 @@ python3 -m venv stats_env --system-site-packages
 source stats_env/bin/activate
 ```
 
-### 5. Verify I2C device connection
+### 5. Next, we will install the Adafruit Blinka library using the following commands. Confirm "Y" when prompted to reboot at the end of the installation.
+
+```bash
+cd ~
+pip3 install --upgrade adafruit-python-shell
+wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+sudo -E env PATH=$PATH python3 raspi-blinka.py
+```
+
+### 6. Verify I2C device connection
 
 To check whether the OLED display is connected and recognized, run:
 
@@ -76,7 +85,7 @@ Example output:
 
 > If the address `3c` does not appear, double-check your wiring and ensure that I2C is enabled (next step).
 
-### 6. Enable I2C interface if needed:
+### 7. Enable I2C interface if needed:
 
 ```bash
 sudo raspi-config
@@ -90,38 +99,7 @@ Navigate to:
 
 Reboot the Raspberry Pi if prompted.
 
-### 7. Install Required System Libraries for Building Python Packages
-
-Make sure you are inside the `stats_env` virtual environment.
-
-```bash
-source stats_env/bin/activate
-```
-
-Then install development libraries needed to build packages like pygame and Pillow:
-
-```bash
-sudo apt-get install build-essential libfreetype6-dev libjpeg-dev \
-pkg-config python3-dev libffi-dev libsdl2-dev libsdl2-image-dev \
-libsdl2-mixer-dev libsdl2-ttf-dev
-```
-
-### 8. Install Project Python Dependencies
-
-Inside the activated virtual environment, run:
-
-```bash
-pip install -r requirements.txt
-```
-
-This will install:
-- adafruit-blinka (CircuitPython compatibility layer)
-- adafruit-circuitpython-ssd1306 (OLED driver)
-- Pillow (Python image processing library)
-- pygame (for input and display simulation)
-- keyboard (keyboard input library)
-
-### 9. Download and Run the project code
+### 8. Download the project code
 
 Exit the virtual environment:
 
@@ -148,7 +126,28 @@ source venv/bin/activate
 cd emotion
 ```
 
-Run the main application:
+### 9. Update pip, setuptools, wheel first to avoid generating error metadata:
+
+```bash
+pip3 install --upgrade pip setuptools wheel
+```
+
+### 10. Install Project Python Dependencies
+
+Inside the activated virtual environment, run:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install:
+- adafruit-blinka (CircuitPython compatibility layer)
+- adafruit-circuitpython-ssd1306 (OLED driver)
+- Pillow (Python image processing library)
+- pygame (for input and display simulation)
+- keyboard (keyboard input library)
+
+### 11. Run the main application:
 
 ```bash
 python3 main.py
@@ -163,6 +162,11 @@ sudo python3 main.py
 
 - If installation of pygame or Pillow fails, ensure step 7 libraries are installed and try reinstalling.
 - The OLED display must use SSD1306 controller. SH1106 is incompatible.
+
+## Screenshots
+
+![happy face](./image/happy.jpeg)
+![angry face](./image/angry.jpeg)
 
 ## Usage Notes
 - The program displays a happy face initially.
