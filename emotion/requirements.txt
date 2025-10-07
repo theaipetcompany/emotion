@@ -1,0 +1,5 @@
+adafruit-blinka==8.66.2
+adafruit-circuitpython-ssd1306==2.12.21
+Pillow==9.5.0
+pygame==2.4.0
+keyboard==0.24.0
