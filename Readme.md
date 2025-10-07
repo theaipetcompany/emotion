@@ -138,7 +138,7 @@ sudo apt-get install git
 Clone the repository:
 
 ```bash
-git clone https://github.com/.git
+git clone https://github.com/theaipetcompany/emotion
 ```
 
 Re-enter the virtual environment and change directory:
