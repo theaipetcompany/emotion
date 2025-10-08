@@ -1,0 +1,56 @@
+---
+description: Update README.md whenever project has new git commit
+alwaysApply: false
+---
+
+# Update README.md Rule
+
+## Trigger
+
+**ALWAYS** update README.md when:
+
+- New git commit is made to the codebase
+- Code structure changes (new files, directories, dependencies)
+- Installation or usage procedures change
+- New features are added or removed
+
+## Hard Rules
+
+### Must Do
+
+1. **Analyze recent changes**: Review commit diff before updating
+2. **Update affected sections**: Only modify sections impacted by changes
+3. **Test instructions**: Verify setup/usage steps still work
+4. **Follow GitHub markdown standards**: Use proper formatting, headers, code blocks
+5. **Keep it current**: Remove outdated information immediately
+
+### Must Include
+
+- **Requirements section**: List all dependencies, versions, system requirements
+- **Getting Started section**: Step-by-step setup instructions from scratch
+- **Usage section**: How to run, use, and interact with the system
+- **Examples**: Working code snippets where applicable
+
+### Must Not Do
+
+- Skip updates after commits that change functionality
+- Leave broken or outdated instructions
+- Use vague descriptions ("install dependencies")
+- Ignore new features in documentation
+
+## Process
+
+1. **Detect trigger**: New commit detected
+2. **Analyze changes**: Review what files/functionality changed
+3. **Identify impact**: Determine which README sections need updates
+4. **Update content**: Modify only affected sections
+5. **Validate**: Ensure instructions are accurate and complete
+
+## Quality Standards
+
+- Use clear, specific language
+- Include exact commands and file paths
+- Test all provided instructions
+- Follow GitHub's markdown best practices
+- Keep sections logically organized
+- Use consistent formatting throughout
