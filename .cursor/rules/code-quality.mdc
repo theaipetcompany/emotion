@@ -1,0 +1,101 @@
+---
+alwaysApply: true
+---
+
+# Code Quality Enforcement Rule
+
+## Automatic Quality Checks
+
+After every code change or implementation, the AI agent MUST automatically run the following commands to ensure code quality:
+
+## Project Type Detection
+
+The rule automatically detects the project type and uses appropriate commands:
+
+### Python Projects (detected by presence of `pyproject.toml`, `requirements.txt`, `setup.py`, or `.py` files)
+
+1. **Type Checking**: `mypy .` or `python -m mypy`
+2. **Linting**: `ruff check .` or `flake8 .` or `black --check .`
+
+### Node.js/TypeScript Projects (detected by presence of `package.json`)
+
+1. **Type Checking**: `pnpm typecheck` or `npm run typecheck` or `tsc --noEmit`
+2. **Linting**: `pnpm lint` or `npm run lint` or `eslint .`
+
+### Fallback Commands (if specific commands fail)
+
+- **Python**: `python -m flake8 .` (linting), `python -m mypy .` (type checking)
+- **Node.js**: `npx eslint .` (linting), `npx tsc --noEmit` (type checking)
+
+### When to Run
+
+- After implementing new features
+- After modifying existing code
+- After refactoring code
+- After moving or renaming files
+- After any code changes that could introduce type or linting issues
+
+### Error Handling
+
+- If type checking fails, fix type errors before proceeding
+- If linting fails, fix linting errors before proceeding
+- Do not consider the task complete until both commands pass successfully
+- If errors cannot be fixed immediately, document them and create follow-up tasks
+
+### Integration with Development Workflow
+
+- This rule applies to ALL code changes, regardless of scope
+- Run these checks even for small changes like moving files
+- Include the results in progress updates
+- Mark tasks as incomplete if quality checks fail
+
+### Exception Handling
+
+- Only skip these checks if explicitly requested by the user
+- Document any skipped checks and the reason
+- Always mention when quality checks are being skipped
+
+## Implementation Notes
+
+- Use the `run_terminal_cmd` tool to execute these commands
+- Parse output to identify specific errors
+- Fix errors systematically, starting with type errors
+- Re-run checks after fixes to ensure they pass
+- Update TODO status based on quality check results
+- Detect project type automatically before running commands
+
+This rule ensures consistent code quality and prevents accumulation of technical debt across different project types.
+
+## Example Workflow
+
+### Python Project
+
+1. Make code changes
+2. Run `mypy .` - if fails, fix type errors
+3. Run `ruff check .` - if fails, fix linting errors
+4. Re-run checks until both pass
+5. Mark task as complete only when quality checks pass
+
+### Node.js Project
+
+1. Make code changes
+2. Run `pnpm typecheck` - if fails, fix TypeScript errors
+3. Run `pnpm lint` - if fails, fix linting errors
+4. Re-run checks until both pass
+5. Mark task as complete only when quality checks pass
+
+## Success Criteria
+
+### Python Projects
+
+- MyPy type checking succeeds (exit code 0)
+- Ruff/Flake8 linting passes with no errors (warnings are acceptable)
+- All import paths are correct after file moves
+- No broken references or missing dependencies
+
+### Node.js Projects
+
+- TypeScript compilation succeeds (exit code 0)
+- ESLint passes with no errors (warnings are acceptable)
+- All import paths are correct after file moves
+- No broken references or missing dependencies

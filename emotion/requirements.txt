@@ -1,5 +1,6 @@
+setuptools
 adafruit-blinka==8.66.2
 adafruit-circuitpython-ssd1306==2.12.21
 Pillow==11.3.0
 pygame==2.6.1
-keyboard==0.24.0
+keyboard==0.13.5
