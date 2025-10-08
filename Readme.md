@@ -26,6 +26,19 @@ sudo apt-get install python3-pip python3-venv git
 sudo reboot
 ```
 
+Create virtual environment (If not already created):
+```bash
+python3 -m venv venv --system-site-packages
+source venv/bin/activate
+```
+
+Install Adafruit Blinka (confirm "Y" to reboot when prompted):
+```bash
+pip3 install --upgrade adafruit-python-shell
+wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+sudo -E env PATH=$PATH python3 raspi-blinka.py
+```
+
 ### 3. Verify I2C connection
 
 Verify I2C is working (look for address `3c`):
@@ -41,19 +54,6 @@ Clone repository:
 ```bash
 git clone https://github.com/theaipetcompany/emotion
 cd emotion
-```
-
-Create virtual environment (If not already created):
-```bash
-python3 -m venv venv --system-site-packages
-source venv/bin/activate
-```
-
-Install Adafruit Blinka (confirm "Y" to reboot when prompted):
-```bash
-pip3 install --upgrade adafruit-python-shell
-wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
-sudo -E env PATH=$PATH python3 raspi-blinka.py
 ```
 
 Activate venv and install dependencies:
