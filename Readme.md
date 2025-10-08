@@ -1,16 +1,8 @@
-# Emotion Face Display 
+# Emotion Face Display 🎭
 
-This is a modular Python application to display animated emotion faces (e.g., happy, angry) on an OLED display. It is designed to run primarily on Raspberry Pi with SSD1306 OLED displays, but can be adapted for PC environments with simulation.
+Display animated emotion faces on an OLED screen (SSD1306). Automatically cycles through 13+ emotions with smooth animations. Designed for Raspberry Pi 5.
 
-
-## Structure
-    ├── emotion/
-    │   ├── bitmaps.py       # Contains byte arrays representing different emotion faces as bitmaps
-    │   ├── oled_display.py  # Manages OLED display initialization and rendering bitmaps to the screen
-    │   ├── input_handler.py # Handles user input for switching between different emotion faces
-    │   ├── main.py          # Main entry point, coordinates display and input handler to switch faces interactivel
-    │   ├── requirements.txt # Specifies Python dependencies and versions
-    ├── README.md        # General information 
+**Features:** Auto-loop emotions • Easy to add new emotions • Frame-by-frame animations • Dynamic loading from PNG files 
 
 
 ## Installation Steps
@@ -25,156 +17,81 @@ Connect the display pins as shown:
 
 ![Display connections](./image/connections.jpeg)
 
-### 2. Upgrade Raspberry Pi firmware and reboot
+### 2. Setup Raspberry Pi
 
+Update system and install dependencies:
 ```bash
-sudo apt-get update
-sudo apt-get -y upgrade
+sudo apt-get update && sudo apt-get -y upgrade
+sudo apt-get install python3-pip python3-venv git
 sudo reboot
 ```
 
-### 3. Install Python pip and upgrade setuptools
+### 3. Verify I2C connection
 
+Verify I2C is working (look for address `3c`):
 ```bash
-sudo apt-get install python3-pip
-sudo apt install --upgrade python3-setuptools
+sudo i2cdetect -y 1
 ```
 
-### 4. Create a Python virtual environment
+If I2C is not enabled, run `sudo raspi-config` → Interfacing Options → I2C → Enable
 
-This is required on Raspberry Pi OS Bookworm and later.
+### 4. Install the project
 
+Clone repository:
 ```bash
-sudo apt install python3-venv
-python3 -m venv stats_env --system-site-packages
-source stats_env/bin/activate
+git clone https://github.com/theaipetcompany/emotion
+cd emotion
 ```
 
-### 5. Next, we will install the Adafruit Blinka library using the following commands. Confirm "Y" when prompted to reboot at the end of the installation.
-
+Create virtual environment (If not already created):
 ```bash
-cd ~
+python3 -m venv venv --system-site-packages
+source venv/bin/activate
+```
+
+Install Adafruit Blinka (confirm "Y" to reboot when prompted):
+```bash
 pip3 install --upgrade adafruit-python-shell
 wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
 sudo -E env PATH=$PATH python3 raspi-blinka.py
 ```
 
-### 6. Verify I2C device connection
-
-To check whether the OLED display is connected and recognized, run:
-
-```bash
-sudo i2cdetect -y 1
-```
-
-Look for the address 3c in the output grid, which is the default I2C address for the SSD1306 OLED display.
-
-Example output:
-
-```bash
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00: -- -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30: -- -- -- -- -- -- -- -- -- -- -- -- 3c -- -- --
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-70: -- -- -- -- -- -- -- --
-```
-
-> If the address `3c` does not appear, double-check your wiring and ensure that I2C is enabled (next step).
-
-### 7. Enable I2C interface if needed:
-
-```bash
-sudo raspi-config
-```
-
-Navigate to:
-- 3 Interfacing Options
-- I5 I2C
-- Select Yes to enable
-- Select OK and then Finish
-
-Reboot the Raspberry Pi if prompted.
-
-### 8. Download the project code
-
-Exit the virtual environment:
-
-```bash
-deactivate
-```
-
-Install git if needed:
-
-```bash
-sudo apt-get install git
-```
-
-Clone the repository:
-
-```bash
-git clone https://github.com/theaipetcompany/emotion
-```
-
-Re-enter the virtual environment and change directory:
-
+Activate venv and install dependencies:
 ```bash
 source venv/bin/activate
-cd emotion
-```
-
-### 9. Update pip, setuptools, wheel first to avoid generating error metadata:
-
-```bash
 pip3 install --upgrade pip setuptools wheel
+pip install -r emotion/requirements.txt
 ```
 
-### 10. Install Project Python Dependencies
-
-Inside the activated virtual environment, run:
+### 5. Run the application
 
 ```bash
-pip install -r requirements.txt
-```
-
-This will install:
-- adafruit-blinka (CircuitPython compatibility layer)
-- adafruit-circuitpython-ssd1306 (OLED driver)
-- Pillow (Python image processing library)
-- pygame (for input and display simulation)
-- keyboard (keyboard input library)
-
-### 11. Run the main application:
-
-```bash
+cd emotion
 python3 main.py
 ```
 
-Troubleshooting
-- If keyboard events do not register: You may need to run with sudo:
+The app will auto-loop through all 13 emotions continuously. Press `Ctrl+C` to stop.
 
-```bash
-sudo python3 main.py
-```
+## ➕ Adding New Emotions
 
-- If installation of pygame or Pillow fails, ensure step 7 libraries are installed and try reinstalling.
-- The OLED display must use SSD1306 controller. SH1106 is incompatible.
+1. Create a folder in `emotion/emotions/` with your emotion name
+2. Add PNG frames named sequentially: `frame0.png`, `frame1.png`, etc.
+3. Run the app - your emotion will be automatically loaded!
 
-## Screenshots
+**Note:** Images are auto-resized to 128x64 and converted to black/white
+
+## 🔧 Troubleshooting
+
+**Missing lgpio:** `pip install lgpio`  
+**Missing pkg_resources:** `pip install setuptools`  
+**Display not working:** Verify I2C with `sudo i2cdetect -y 1` (look for `3c`)  
+**OLED must be SSD1306** (SH1106 not compatible)
+
+## 📸 Screenshots
 
 ![happy face](./image/happy.jpeg)
 ![angry face](./image/angry.jpeg)
 
-## Usage Notes
-- The program displays a happy face initially.
-- Press the spacebar to switch to the angry face.
-- The display updates continuously until the program stops.
+---
 
-## Additional Resources
-
-- [Adafruit Blinka](https://github.com/adafruit/Adafruit_Blinka)  
-- [CircuitPython SSD1306](https://github.com/adafruit/Adafruit_CircuitPython_SSD1306)  
-
+**Resources:** [Adafruit Blinka](https://github.com/adafruit/Adafruit_Blinka) • [CircuitPython SSD1306](https://github.com/adafruit/Adafruit_CircuitPython_SSD1306)  
