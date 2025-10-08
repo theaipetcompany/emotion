@@ -1,11 +1,10 @@
 from oled_display import OLEDDisplay
 from emotion_loader import EmotionLoader
-from input_handler import InputHandler
+import time
 
 def main():
     display = OLEDDisplay()
     emotion_loader = EmotionLoader()
-    input_handler = InputHandler()
     
     # Get available emotions
     emotions = emotion_loader.get_emotion_names()
@@ -14,29 +13,38 @@ def main():
         return
     
     print(f"Available emotions: {emotions}")
+    print(f"Total: {len(emotions)} emotions")
+    print("\nStarting emotion display loop...")
+    print("Press Ctrl+C to stop\n")
     
-    # Display happy emotion animation
-    if emotion_loader.has_emotion("happy"):
-        print("Displaying 'happy' emotion animation")
-        print("Press SPACE to switch to next emotion")
-        happy_frames = emotion_loader.get_emotion("happy")
-        # Display first frame and wait
-        display.display_image(happy_frames[0])
-    else:
-        print("'happy' emotion not found")
-        return
+    try:
+        # Infinite loop to continuously cycle through all emotions
+        while True:
+            for emotion_name in sorted(emotions):  # Sort for consistent order
+                frames = emotion_loader.get_emotion(emotion_name)
+                
+                if not frames:
+                    print(f"⚠️  Skipping {emotion_name} - no frames loaded")
+                    continue
+                
+                # Display emotion info
+                print(f"▶️  Playing: {emotion_name} ({len(frames)} frames)")
+                
+                # Play the animation
+                # Adjust FPS based on number of frames for smooth playback
+                fps = 30 if len(frames) > 50 else 20
+                display.display_animation(frames, fps=fps, loop=1)
+                
+                # Brief pause between emotions
+                time.sleep(0.3)
+            
+            print("\n🔄 Completed one full cycle. Restarting...\n")
+            time.sleep(1)  # Pause before restarting the cycle
     
-    input_handler.wait_for_space()
-    
-    # Display angry emotion animation
-    if emotion_loader.has_emotion("angry"):
-        print("Displaying 'angry' emotion animation")
-        print("Animation will loop 2 times")
-        angry_frames = emotion_loader.get_emotion("angry")
-        display.display_animation(angry_frames, fps=15, loop=2)
-        print("Animation complete!")
-    else:
-        print("'angry' emotion not found")
+    except KeyboardInterrupt:
+        print("\n\n✋ Stopped by user")
+        display.clear()
+        print("Display cleared. Goodbye!")
 
 if __name__ == "__main__":
     main()
